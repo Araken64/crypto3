@@ -2,29 +2,21 @@ import java.io.*;
 
 public class SecuJavaExo3 {
 
-    public static void afficherDonneesBrutes(String filename) throws Exception  {
+    public static void afficherDonneesBrutes(String filename) {
 	System.out.println("\nlecture du fichier \"" +filename+ "\" (donnees brutes):\n---");
-		try {
-			InputStream is = new FileInputStream(filename);
-			try {
-				byte[] buffer = new byte[64];
-				boolean eof = false;
-				do {
-					int c = is.read(buffer);
-					if (c != -1)
-						System.out.print(new String(buffer,0,c));
-					else
-						eof = true;
-				} while (!eof);
-				System.out.println("---\n");
-			} catch (IOException e) {
-				System.err.println("Erreur entree-sortie");
-			} finally {
-				is.close();
-			}
-		} catch(FileNotFoundException e) {
-			System.err.println(filename + " pas trouve");
-			return;
+		try (InputStream is = new FileInputStream(filename)) {
+			byte[] buffer = new byte[64];
+			boolean eof = false;
+			do {
+				int c = is.read(buffer);
+				if (c != -1)
+					System.out.print(new String(buffer, 0, c));
+				else
+					eof = true;
+			} while (!eof);
+			System.out.println("---\n");
+		} catch (IOException e) {
+			System.err.println("Erreur entree-sortie");
 		}
     }
 
@@ -38,25 +30,17 @@ public class SecuJavaExo3 {
 
 		javax.crypto.Cipher dec = javax.crypto.Cipher.getInstance("RSA/ECB/PKCS1Padding");
 		dec.init(javax.crypto.Cipher.DECRYPT_MODE, cer.getPublicKey());
-		try {
-			InputStream is = new FileInputStream(filename);
-			try {
-				byte[] buffer = new byte[64];
-				boolean eof = false;
-				do {
-					int c = is.read(buffer);
-					if (c != -1) dec.update(buffer);
-					else eof = true;
+		try (InputStream is = new FileInputStream(filename)) {
+			byte[] buffer = new byte[64];
+			boolean eof = false;
+			do {
+				int c = is.read(buffer);
+				if (c != -1) dec.update(buffer);
+				else eof = true;
 
-				} while (!eof);
-			} catch (IOException e) {
-				System.err.println("Erreur entree-sortie");
-			} finally {
-				is.close();
-			}
-		} catch(FileNotFoundException e) {
-			System.err.println(filename + " pas trouve");
-			return;
+			} while (!eof);
+		} catch (IOException e) {
+			System.err.println("Erreur entree-sortie");
 		}
 		System.out.println(new String(dec.doFinal()));
 		System.out.println("---\n");

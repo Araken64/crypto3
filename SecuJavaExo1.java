@@ -1,5 +1,6 @@
-import java.util.Properties;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class SecuJavaExo1 {
 
@@ -7,7 +8,7 @@ public class SecuJavaExo1 {
 		System.out.println("Propriete " + nomPropriete + "=" + System.getProperty(nomPropriete));
     }
     
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 		afficherPropriete("java.version");
 		afficherPropriete("user.name");
 		afficherPropriete("user.home");
@@ -25,27 +26,15 @@ public class SecuJavaExo1 {
 		else
 			fichier = "tahiti.txt";
 		System.out.println("\n"+nblignes+" premieres lignes de \"" +fichier+ "\":");
-		try {
-			FileReader fr = new FileReader(fichier);
-			BufferedReader br = new BufferedReader(fr);
-			try {
-				for (int i = 0; i < nblignes; i++) {
-					ligne = br.readLine();
-					if (ligne == null) break;
-					System.out.println("> "+ligne);
-				}
-				System.out.println("> ...");
-				}
-			catch (IOException e) {
-				System.err.println("Erreur entree-sortie");
+		try (FileReader fr = new FileReader(fichier); BufferedReader br = new BufferedReader(fr)) {
+			for (int i = 0; i < nblignes; i++) {
+				ligne = br.readLine();
+				if (ligne == null) break;
+				System.out.println("> " + ligne);
 			}
-			finally {
-				br.close();
-			}
-		}
-		catch(FileNotFoundException e) {
-			System.err.println(fichier + " pas trouve");
-			return;
+			System.out.println("> ...");
+		} catch (IOException e) {
+			System.err.println("Erreur entree-sortie");
 		}
     }
 }
