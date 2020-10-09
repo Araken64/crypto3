@@ -1,0 +1,10 @@
+/* AUTOMATICALLY GENERATED ON Fri Oct 09 13:16:34 CEST 2020*/
+/* DO NOT EDIT */
+
+grant codeBase "file:./out/production/crypto3/" {
+  permission java.util.PropertyPermission "user.name", "read";
+  permission java.util.PropertyPermission "user.home", "read";
+  permission java.util.PropertyPermission "*", "read, write";
+  permission java.io.FilePermission "tahiti.txt", "read";
+};
+
